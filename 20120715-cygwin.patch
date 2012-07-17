@@ -1,0 +1,24 @@
+--- origsrc/uemacs/epath.h	2012-07-17 07:09:17.000000000 -0500
++++ src/uemacs/epath.h	2012-07-17 07:42:31.794960600 -0500
+@@ -28,6 +28,9 @@ static char *pathname[] =
+ #if	PKCODE
+ 	    "/usr/global/lib/", "/usr/local/bin/", "/usr/local/lib/",
+ #endif
++#if	CYGWIN
++	"/usr/share/uemacs/",
++#endif
+ "/usr/local/", "/usr/lib/", ""};
+ #endif
+ 
+--- origsrc/uemacs/Makefile	2012-07-17 07:09:17.000000000 -0500
++++ src/uemacs/Makefile	2012-07-17 07:42:46.490801100 -0500
+@@ -48,6 +48,9 @@ endif
+ ifeq ($(uname_S),Darwin)
+  DEFINES=-DAUTOCONF -DPOSIX -DSYSV -D_DARWIN_C_SOURCE -D_BSD_SOURCE -D_SVID_SOURCE -D_XOPEN_SOURCE=600
+ endif
++ifneq ($(filter CYGWIN%,$(uname_S)),)
++ DEFINES=-I/usr/include/ncurses -DAUTOCONF -DPOSIX -DCYGWIN -DUSG -DXCASE=0 -DECHOPRT=0 -DPENDIN=0
++endif
+ #DEFINES=-DAUTOCONF
+ #LIBS=-ltermcap			# BSD
+ LIBS=-lcurses			# SYSV

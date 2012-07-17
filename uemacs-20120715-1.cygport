@@ -1,0 +1,22 @@
+GIT_URI="git://git.kernel.org/pub/scm/editors/uemacs/uemacs.git"
+PATCH_URI="20120715-strip.patch
+           20120715-cygwin.patch"
+inherit git
+
+CATEGORY="Editors"
+SUMMARY="MicroEMACS editor with Linus Torvalds' patchset"
+DESCRIPTION="uEmacs/PK 4.0 is an enhanced version of MicroEMACS 3.9e."
+REQUIRES="libncurses10"
+BUILDREQUIRES="pkgconfig(ncurses)"
+
+src_compile() {
+	lndirs
+	cd ${B}
+	cygmake CC="${CC}" CFLAGS="${CFLAGS}"
+}
+
+src_install() {
+	cd ${B}
+	dodir /usr/bin /usr/share/${PN}
+	cyginstall BINDIR=${D}/usr/bin LIBDIR=${D}/usr/share/${PN} STRIP=:
+}
